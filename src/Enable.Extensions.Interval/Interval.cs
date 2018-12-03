@@ -18,7 +18,7 @@ namespace Enable.Extensions.Interval
     /// <paramref name="lowerBound"/> is greater than
     /// <paramref name="upperBound"/>.
     /// </exception>
-    public struct Interval<T>
+    public struct Interval<T> : IEquatable<Interval<T>>
         where T : struct, IComparable
     {
         public Interval(T lowerBound, T upperBound)
@@ -41,6 +41,38 @@ namespace Enable.Extensions.Interval
 
         public T UpperBound { get; private set; }
 
+        public static bool operator ==(Interval<T> first, Interval<T> second)
+        {
+            return first.LowerBound.Equals(second.LowerBound) &&
+                first.UpperBound.Equals(second.UpperBound);
+        }
+
+        public static bool operator !=(Interval<T> first, Interval<T> second)
+        {
+            return !(first == second);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Interval<T>)
+            {
+                var other = (Interval<T>)obj;
+                return LowerBound.Equals(other.LowerBound) && UpperBound.Equals(other.UpperBound);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return LowerBound.GetHashCode() ^ UpperBound.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return $"[{LowerBound}, {UpperBound}]";
+        }
+
         /// <summary>
         /// Check if <paramref name="value"/> lies within the interval.
         /// </summary>
@@ -59,14 +91,9 @@ namespace Enable.Extensions.Interval
             return lower && upper;
         }
 
-        public override string ToString()
+        public bool Equals(Interval<T> other)
         {
-            return $"[{LowerBound}, {UpperBound}]";
-        }
-
-        public override int GetHashCode()
-        {
-            return LowerBound.GetHashCode() ^ UpperBound.GetHashCode();
+            return this == other;
         }
     }
 }
