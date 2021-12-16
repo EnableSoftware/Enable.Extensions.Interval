@@ -29,3 +29,4 @@ Intervals can be used with any type that implements
 for example, integer types like `byte`, `char` and `long`, floating point
 types like `float`, `double` and `decimal` and date/time types like `TimeSpan`
 and `DateTimeOffset`.
+
